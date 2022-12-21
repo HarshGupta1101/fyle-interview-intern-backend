@@ -25,6 +25,18 @@ def test_get_assignments_teacher_2(client, h_teacher_2):
         assert assignment['teacher_id'] == 2
         assert assignment['state'] == 'SUBMITTED'
 
+def test_get_assignments_unauthorized_teacher(client):
+    """
+    failure case: only authorized teachers can get the assignments submitted to them.
+    """
+    response = client.get(
+        '/teacher/assignments',
+        headers=""
+    )
+
+    assert response.status_code == 401
+    data = response.json
+    assert data['error'] == 'FyleError'
 
 def test_grade_assignment_cross(client, h_teacher_2):
     """
@@ -116,3 +128,21 @@ def test_grade_assignment_teacher_1(client, h_teacher_1):
     data = response.json['data']
     assert data['grade'] == "A"
     assert data['state'] == 'GRADED'
+
+def test_grade_assignment_student_1(client, h_student_1):
+    """
+    failure case: only teachers can grade the assignment.
+    """
+    response = client.post(
+        '/teacher/assignments/grade',
+        headers=h_student_1
+        , json={
+            "id": 1,
+            "grade": "A"
+        }
+    )
+
+    assert response.status_code == 403
+    data = response.json
+    assert data['error'] == 'FyleError'
+    

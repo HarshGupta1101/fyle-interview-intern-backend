@@ -41,7 +41,6 @@ def test_post_assignment_student_1(client, h_student_1):
     assert data['state'] == 'DRAFT'
     assert data['teacher_id'] is None
 
-
 def test_submit_assignment_student_1(client, h_student_1):
     response = client.post(
         '/student/assignments/submit',

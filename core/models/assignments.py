@@ -77,7 +77,7 @@ class Assignment(db.Model):
         assignment = Assignment.get_by_id(_id)
         assertions.assert_found(assignment, 'No assignment with this id was found')
         assertions.assert_valid(assignment.teacher_id == principal.teacher_id, 'This assignment was submitted to some other teacher')
-
+        
         assignment.grade = grade
         assignment.state = AssignmentStateEnum.GRADED
 
